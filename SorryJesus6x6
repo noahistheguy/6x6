@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Color Grid</title>
+  <style>
+    #grid {
+      display: inline-grid;
+      grid-template-columns: repeat(6, 50px);
+      grid-template-rows: repeat(6, 50px);
+      gap: 2px;
+      border: 1px solid black; /* Add black outline */
+    }
+
+    .square {
+      width: 50px;
+      height: 50px;
+    }
+
+    .red {
+      background-color: red;
+    }
+
+    .blue {
+      background-color: blue;
+    }
+
+    .gray {
+      background-color: gray;
+    }
+  </style>
+</head>
+<body>
+  <h1>Sorry Jesus</h1>
+  <div id="grid"></div>
+  <button id="goButton" onclick="generateColors()">Go!</button>
+  <div id="countdown"></div>
+  <button id="revealButton" style="display: none;" onclick="revealColors()">Reveal</button>
+
+  <script>
+    var squares = [];
+    var originalColors = [];
+
+    // Generate random colors for the grid
+    function generateColors() {
+      var grid = document.getElementById('grid');
+      grid.innerHTML = '';
+
+      for (var i = 0; i < 36; i++) {
+        var square = document.createElement('div');
+        square.classList.add('square');
+        var color = Math.random() < 0.5 ? 'red' : 'blue';
+        square.classList.add(color);
+        grid.appendChild(square);
+        squares.push(square);
+        originalColors.push(color);
+      }
+
+      startCountdown();
+      document.getElementById('goButton').disabled = true;
+    }
+
+    // Start the countdown
+    function startCountdown() {
+      var countdown = document.getElementById('countdown');
+      var seconds = 10;
+      countdown.textContent = seconds;
+
+      var countdownInterval = setInterval(function() {
+        seconds--;
+        countdown.textContent = seconds;
+
+        if (seconds === 0) {
+          clearInterval(countdownInterval);
+          hideSquares();
+          document.getElementById('revealButton').style.display = 'block';
+        }
+      }, 1000);
+    }
+
+    // Hide the squares
+    function hideSquares() {
+      squares.forEach(function(square) {
+        square.classList.remove('red', 'blue');
+        square.classList.add('gray');
+      });
+    }
+
+    // Reveal the colors
+    function revealColors() {
+      squares.forEach(function(square, index) {
+        square.classList.remove('gray');
+        square.classList.add(originalColors[index]);
+      });
+
+      document.getElementById('revealButton').style.display = 'none';
+      document.getElementById('goButton').disabled = false;
+    }
+  </script>
+</body>
+</html>
